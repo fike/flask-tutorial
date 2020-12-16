@@ -1,3 +1,5 @@
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ffike%2Fflask-tutorial.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Ffike%2Fflask-tutorial?ref=badge_shield)
+
 Flaskr
 ======
 
@@ -55,3 +57,6 @@ TODO
 * Add remote container development
 * Add cookie session 
 * Add cookie for change color theme
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ffike%2Fflask-tutorial.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Ffike%2Fflask-tutorial?ref=badge_large)
