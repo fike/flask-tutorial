@@ -1,7 +1,7 @@
 import pytest
 
 from flaskr import db
-from flaskr.auth.models import Users
+from flaskr.auth.models import User
 from flaskr.blog.models import Post
 
 
@@ -27,7 +27,7 @@ def test_login_required(client, path):
 def test_author_required(app, client, auth):
     # change the post author to another user
     with app.app_context():
-        Post.query.get(1).author = Users.query.get(2)
+        Post.query.get(1).author = User.query.get(2)
         db.session.commit()
 
     auth.login()

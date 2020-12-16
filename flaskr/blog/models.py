@@ -1,21 +1,21 @@
 from flask import url_for
 
 from flaskr import db
-from flaskr.auth.models import Users
+from flaskr.auth.models import User
 
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    author_id = db.Column(db.ForeignKey(Users.id), nullable=False)
+    author_id = db.Column(db.ForeignKey(User.id), nullable=False)
     created = db.Column(
         db.DateTime, nullable=False, server_default=db.func.current_timestamp()
     )
     title = db.Column(db.String, nullable=False)
     body = db.Column(db.String, nullable=False)
 
-    # Users object backed by author_id
+    # User object backed by author_id
     # lazy="joined" means the user is returned with the post in one query
-    author = db.relationship(Users, lazy="joined", backref="posts")
+    author = db.relationship(User, lazy="joined", backref="posts")
 
     @property
     def update_url(self):

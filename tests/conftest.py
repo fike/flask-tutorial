@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash
 from flaskr import create_app
 from flaskr import db
 from flaskr import init_db
-from flaskr.auth.models import Users
+from flaskr.auth.models import User
 from flaskr.blog.models import Post
 
 _user1_pass = generate_password_hash("test")
@@ -24,11 +24,11 @@ def app():
     # set _password to pre-generated hashes, since hashing for each test is slow
     with app.app_context():
         init_db()
-        user = Users(username="test", _password=_user1_pass, profile="test user profile")
+        user = User(username="test", _password=_user1_pass, profile="test user profile")
         db.session.add_all(
             (
                 user,
-                Users(username="other", _password=_user2_pass, profile="other user profile"),
+                User(username="other", _password=_user2_pass, profile="other user profile"),
                 Post(
                     title="test title",
                     body="test\nbody",

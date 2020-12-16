@@ -7,7 +7,7 @@ from sqlalchemy import UniqueConstraint
 
 
 
-class Users(db.Model):
+class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
     _password = db.Column("password", db.String, nullable=False)

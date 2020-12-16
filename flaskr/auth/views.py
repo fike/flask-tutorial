@@ -11,7 +11,7 @@ from flask import url_for
 from werkzeug.exceptions import abort
 
 from flaskr import db
-from flaskr.auth.models import Users
+from flaskr.auth.models import User
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -30,9 +30,9 @@ def login_required(view):
 
 
 def get_profile(id, check_author=True):
-    # user = Users.query.filter_by(id=id).with_entities(Users.username.label('username'), Users.profile.label('profile')).first()
+    # user = User.query.filter_by(id=id).with_entities(User.username.label('username'), User.profile.label('profile')).first()
     # user.update({'username': user_attributes[0], 'profile' = })
-    user = Users.query.get_or_404(id, f"User id {id} doesn't exist.")
+    user = User.query.get_or_404(id, f"User id {id} doesn't exist.")
     print(user.username)
     print(g.user)
     if check_author and user != g.user:
@@ -46,7 +46,7 @@ def load_logged_in_user():
     """If a user id is stored in the session, load the user object from
     the database into ``g.user``."""
     user_id = session.get("user_id")
-    g.user = Users.query.get(user_id) if user_id is not None else None
+    g.user = User.query.get(user_id) if user_id is not None else None
 
 
 @bp.route("/register", methods=("GET", "POST"))
@@ -69,13 +69,13 @@ def register():
         elif not profile:
             error = "Profile is required."
         elif db.session.query(
-            Users.query.filter_by(username=username).exists()
+            User.query.filter_by(username=username).exists()
         ).scalar():
             error = f"User {username} is already registered."
 
         if error is None:
             # the name is available, create the user and go to the login page
-            db.session.add(Users(username=username, password=password, profile=profile))
+            db.session.add(User(username=username, password=password, profile=profile))
             db.session.commit()
             return redirect(url_for("auth.login"))
 
@@ -91,7 +91,7 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         error = None
-        user = Users.query.filter_by(username=username).first()
+        user = User.query.filter_by(username=username).first()
 
         if user is None:
             error = "Incorrect username."

@@ -3,7 +3,7 @@ from flask import g
 from flask import session
 
 from flaskr import db
-from flaskr.auth.models import Users
+from flaskr.auth.models import User
 
 
 def test_register(client, app):
@@ -17,11 +17,11 @@ def test_register(client, app):
 
     # test that the user was inserted into the database
     with app.app_context():
-        assert Users.query.filter_by(username="a").first() is not None
+        assert User.query.filter_by(username="a").first() is not None
 
 
 def test_user_password(app):
-    user = Users(username="a", password="a")
+    user = User(username="a", password="a")
     assert user.password != "a"
     assert user.check_password("a")
 
@@ -88,4 +88,4 @@ def test_profile_update(client, auth, app):
     client.post("/auth/1/profile", data={"username": "a", "profile": "b"})
 
     with app.app_context():
-        assert Users.query.get(1).profile == "b"
+        assert User.query.get(1).profile == "b"
