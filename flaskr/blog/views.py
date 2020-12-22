@@ -26,25 +26,25 @@ def index():
     if cookie is not None:
         bgcolor = cookie
         response_html = render_template(
-            "blog/index.html", 
-            posts=posts, 
+            "blog/index.html",
+            posts=posts,
             bgcolor=bgcolor)
 
     elif g.user:
         bgcolor = g.user.bgcolor
         response_html = make_response(
             render_template(
-                "blog/index.html", 
-                posts=posts, 
+                "blog/index.html",
+                posts=posts,
                 bgcolor=bgcolor)
         )
         response_html.set_cookie('color', bgcolor)
-    
+
     else:
         bgcolor = "lightgray"
         response_html = render_template(
-            "blog/index.html", 
-            posts=posts, 
+            "blog/index.html",
+            posts=posts,
             bgcolor=bgcolor)
 
     return response_html
@@ -112,9 +112,12 @@ def update(id):
             post.title = title
             post.body = body
             db.session.commit()
-            return redirect(url_for("blog.index"))
+            response_html = redirect(url_for("blog.index"))
+            return response_html
 
-    return render_template("blog/update.html", post=post)
+    response_html = render_template("blog/update.html", post=post)
+    
+    return response_html
 
 
 @bp.route("/<int:id>/delete", methods=("POST",))
@@ -128,4 +131,6 @@ def delete(id):
     post = get_post(id)
     db.session.delete(post)
     db.session.commit()
-    return redirect(url_for("blog.index"))
+    response_html = redirect(url_for("blog.index"))
+    
+    return response_html

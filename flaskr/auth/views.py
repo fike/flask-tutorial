@@ -80,11 +80,14 @@ def register():
             db.session.add(User(username=username, password=password,
                                 profile=profile, bgcolor=bgcolor))
             db.session.commit()
-            return redirect(url_for("auth.login"))
+            response_html = redirect(url_for("auth.login"))
+            return response_html
 
         flash(error)
 
-    return render_template("auth/register.html")
+    response_html = render_template("auth/register.html")
+
+    return response_html
 
 
 @bp.route("/login", methods=("GET", "POST"))
@@ -109,14 +112,17 @@ def login():
 
         flash(error)
 
-    return render_template("auth/login.html")
+    response_html = render_template("auth/login.html")
+
+    return response_html
 
 
 @bp.route("/logout")
 def logout():
     """Clear the current session, including the stored user id."""
     session.clear()
-    return redirect(url_for("index"))
+    response_html = redirect(url_for("index"))
+    return response_html
 
 
 @bp.route("/<int:id>/profile", methods=("GET", "POST"))
@@ -125,11 +131,11 @@ def profile(id):
     """Update a user profile"""
     user = get_profile(id)
 
-    lbgcolors = ["lightgray", "yellow", "purple" ]
+    lbgcolors = ["lightgray", "yellow", "purple"]
     response_html = ''
-    
+
     if request.method == "POST":
-        username = request.form["username"] 
+        username = request.form["username"]
         profile = request.form["profile"]
         bgcolor = request.form["bgcolor"]
         error = None
@@ -139,7 +145,7 @@ def profile(id):
 
         if not profile:
             error = "Profile is required"
-        
+
         if not bgcolor:
             error = "Banner color is required."
 
@@ -153,5 +159,5 @@ def profile(id):
             db.session.commit()
             response_html.set_cookie('color', bgcolor)
             return response_html
-    
+
     return render_template("auth/profile.html", user=user, lbgcolors=lbgcolors)

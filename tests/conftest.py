@@ -18,17 +18,20 @@ def app():
     """Create and configure a new app instance for each test."""
     # create the app with common test config
     # app = create_app({"TESTING": True, "SQLALCHEMY_DATABASE_URI": "sqlite:///:memory:"})
-    app = create_app({"TESTING": True, "SQLALCHEMY_DATABASE_URI": "postgresql://flaskr:flaskr_pass@localhost:5432/test_flaskr"})
+    app = create_app({"TESTING": True, "SQLALCHEMY_DATABASE_URI":
+                      "postgresql://flaskr:flaskr_pass@localhost:5432/test_flaskr"})
 
     # create the database and load test data
     # set _password to pre-generated hashes, since hashing for each test is slow
     with app.app_context():
         init_db()
-        user = User(username="test", _password=_user1_pass, profile="test user profile", bgcolor="ligthgray")
+        user = User(username="test", _password=_user1_pass,
+                    profile="test user profile", bgcolor="ligthgray")
         db.session.add_all(
             (
                 user,
-                User(username="other", _password=_user2_pass, profile="other user profile", bgcolor="yellow"),
+                User(username="other", _password=_user2_pass,
+                     profile="other user profile", bgcolor="yellow"),
                 Post(
                     title="test title",
                     body="test\nbody",
@@ -60,8 +63,11 @@ class AuthActions:
 
     def login(self, username="test", password="test", profile="User test profile", bgcolor="ligthgray"):
         return self._client.post(
-            "/auth/login", data={"username": username, "password": password, profile:"profile", bgcolor:"bgcolor"}
-        )
+            "/auth/login", data={"username": username, 
+                                 "password": password, 
+                                 "profile": profile, 
+                                 "bgcolor": bgcolor}
+            )
 
     def logout(self):
         return self._client.get("/auth/logout")

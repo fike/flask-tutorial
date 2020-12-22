@@ -11,8 +11,7 @@ def test_register(client, app):
     assert client.get("/auth/register").status_code == 200
 
     # test that successful registration redirects to the login page
-    response = client.post(
-        "/auth/register", data={"username": "a", "password": "a", "profile": "a user profile", "bgcolor": "ligthgray"})
+    response = client.post("/auth/register", data={"username": "a", "password": "a", "profile": "a user profile", "bgcolor": "ligthgray"})
     assert "http://localhost/auth/login" == response.headers["Location"]
 
     # test that the user was inserted into the database
@@ -89,3 +88,4 @@ def test_profile_update(client, auth, app):
 
     with app.app_context():
         assert User.query.get(1).profile == "b"
+        assert User.query.get(1).bgcolor == "yellow"
