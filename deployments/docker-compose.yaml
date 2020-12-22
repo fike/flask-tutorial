@@ -19,7 +19,7 @@ services:
       args: 
         ENVIRONMENT: developement
     volumes:
-      - ${PWD}:/opt/flaskr
+      - $PWD:/opt/flaskr
     depends_on:
       - db
     environment:

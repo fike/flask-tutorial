@@ -24,11 +24,11 @@ def app():
     # set _password to pre-generated hashes, since hashing for each test is slow
     with app.app_context():
         init_db()
-        user = User(username="test", _password=_user1_pass, profile="test user profile")
+        user = User(username="test", _password=_user1_pass, profile="test user profile", bgcolor="ligthgray")
         db.session.add_all(
             (
                 user,
-                User(username="other", _password=_user2_pass, profile="other user profile"),
+                User(username="other", _password=_user2_pass, profile="other user profile", bgcolor="yellow"),
                 Post(
                     title="test title",
                     body="test\nbody",
@@ -58,9 +58,9 @@ class AuthActions:
     def __init__(self, client):
         self._client = client
 
-    def login(self, username="test", password="test", profile="User test profile"):
+    def login(self, username="test", password="test", profile="User test profile", bgcolor="ligthgray"):
         return self._client.post(
-            "/auth/login", data={"username": username, "password": password, profile:"profile"}
+            "/auth/login", data={"username": username, "password": password, profile:"profile", bgcolor:"bgcolor"}
         )
 
     def logout(self):

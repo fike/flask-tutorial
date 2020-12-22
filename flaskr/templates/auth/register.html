@@ -6,13 +6,19 @@
 {% endblock %}
 
 {% block content %}
-  <form method="post">
+  <form method="post" id=register>
     <label for="username">Username</label>
     <input name="username" id="username" required>
     <label for="profile">Profile Description</label>
     <input name="profile" id="profile" required>
     <label for="password">Password</label>
     <input type="password" name="password" id="password" required>
+    <label for="bgcolor">Choose a banner background color</label>
+    <select id="bgcolor" name=bgcolor form=register>
+      <option value="lightgray">Lightgray</option>
+      <option value="yellow">Yellow</option>
+      <option value="purple">Purple</option>
+    </select>
     <input type="submit" value="Register">
   </form>
 {% endblock %}

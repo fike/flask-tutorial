@@ -5,11 +5,21 @@
 {% endblock %}
 
 {% block content %}
-  <form method="post">
+  <form method="post" id=profile>
     <label for="username">Username</label>
     <input name="username" id="username" value="{{ request.form['username'] or user['username'] }}" required>
     <label for="profile">Profile</label>
     <textarea name="profile" id="profile">{{ request.form['profile'] or user['profile'] }}</textarea>
+    <label for="bgcolor">Choose a banner background color</label>
+    <select id="bgcolor" name=bgcolor form=profile >
+      <option value={{ request.form['bgcolor'] or user['bgcolor'] }}>{{ request.form['bgcolor'] or user['bgcolor'] }}</option>
+      {% for lbgcolor in lbgcolors %}
+        {% if lbgcolor !=  user['bgcolor'] %}
+        <option value="{{lbgcolor}}">{{lbgcolor}}</option>
+        {% endif %}
+      {% endfor %}
+    </select>
     <input type="submit" value="Save">
   </form>
 {% endblock %}
+

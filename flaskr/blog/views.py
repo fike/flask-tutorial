@@ -1,6 +1,7 @@
 from flask import Blueprint
 from flask import flash
 from flask import g
+from flask import make_response
 from flask import redirect
 from flask import render_template
 from flask import request
@@ -17,8 +18,36 @@ bp = Blueprint("blog", __name__)
 @bp.route("/")
 def index():
     """Show all the posts, most recent first."""
+    response_html = ''
     posts = Post.query.order_by(Post.created.desc()).all()
-    return render_template("blog/index.html", posts=posts)
+
+    cookie = request.cookies.get('color')
+
+    if cookie is not None:
+        bgcolor = cookie
+        response_html = render_template(
+            "blog/index.html", 
+            posts=posts, 
+            bgcolor=bgcolor)
+
+    elif g.user:
+        bgcolor = g.user.bgcolor
+        response_html = make_response(
+            render_template(
+                "blog/index.html", 
+                posts=posts, 
+                bgcolor=bgcolor)
+        )
+        response_html.set_cookie('color', bgcolor)
+    
+    else:
+        bgcolor = "lightgray"
+        response_html = render_template(
+            "blog/index.html", 
+            posts=posts, 
+            bgcolor=bgcolor)
+
+    return response_html
 
 
 def get_post(id, check_author=True):

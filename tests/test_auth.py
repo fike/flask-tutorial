@@ -12,7 +12,7 @@ def test_register(client, app):
 
     # test that successful registration redirects to the login page
     response = client.post(
-        "/auth/register", data={"username": "a", "password": "a", "profile": "a user profile"})
+        "/auth/register", data={"username": "a", "password": "a", "profile": "a user profile", "bgcolor": "ligthgray"})
     assert "http://localhost/auth/login" == response.headers["Location"]
 
     # test that the user was inserted into the database
@@ -27,18 +27,18 @@ def test_user_password(app):
 
 
 @pytest.mark.parametrize(
-    ("username", "password", "profile", "message"),
+    ("username", "password", "profile", "bgcolor", "message"),
     (
-        ("", "", "", b"Username is required."),
-        ("a", "", "", b"Password is required."),
-        ("a", "a", "", b"Profile is required."),
-        ("test", "test", "test user profile", b"already registered"),
-        ("other", "test1", "other user profile", b"already registered"),
+        ("", "", "", "", b"Username is required."),
+        ("a", "", "", "", b"Password is required."),
+        ("a", "a", "", "", b"Profile is required."),
+        ("test", "test", "test user profile", "ligthgray", b"already registered"),
+        ("other", "test1", "other user profile", "ligthgray", b"already registered"),
     ),
 )
-def test_register_validate_input(client, username, password, profile, message):
+def test_register_validate_input(client, username, password, profile, bgcolor, message):
     response = client.post(
-        "/auth/register", data={"username": username, "password": password, "profile": profile}
+        "/auth/register", data={"username": username, "password": password, "profile": profile, "bgcolor": bgcolor}
     )
     assert message in response.data
 
@@ -85,7 +85,7 @@ def test_profile_required(app, client, auth):
 def test_profile_update(client, auth, app):
     auth.login()
     assert client.get("/auth/1/profile").status_code == 200
-    client.post("/auth/1/profile", data={"username": "a", "profile": "b"})
+    client.post("/auth/1/profile", data={"username": "a", "profile": "b", "bgcolor": "yellow"})
 
     with app.app_context():
         assert User.query.get(1).profile == "b"
