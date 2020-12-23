@@ -6,13 +6,35 @@
 {% endblock %}
 
 {% block content %}
-  <form method="post">
-    <label for="username">Username</label>
-    <input name="username" id="username" required>
-    <label for="profile">Profile Description</label>
-    <input name="profile" id="profile" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <input type="submit" value="Register">
+  <form method="post" id=register>
+    <div class=form_label>
+      <label for="username">Username</label>
+    </div>
+    <div class=form_field>
+      <input class=form_field name="username" id="username" required>
+    </div>
+    <div class=form_label>
+      <label for="profile">Profile Description</label>
+    </div>
+    <div class=form_field>
+      <input class=form_field name="profile" id="profile" required>
+    </div>
+    <div class=form_label>
+      <label for="password">Password</label>
+    </div>
+    <div class=form_field>
+      <input class=form_field type="password" name="password" id="password" required>
+    </div>
+    <div class=form_select>
+      <label for="bgcolor">Choose a banner background color: </label>
+      <select id="bgcolor" name=bgcolor form=register>
+        <option value="lightgray">Lightgray</option>
+        <option value="yellow">Yellow</option>
+        <option value="purple">Purple</option>
+      </select>
+    </div>
+    <div class=form_button>
+      <input type="submit" value="Register">
+    </div>
   </form>
 {% endblock %}

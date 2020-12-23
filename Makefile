@@ -1,12 +1,5 @@
 PHONY: build up
 
-migrate: export FLASK_APP = flaskr
-migrate: export FLASK_ENV = development
-init-db: export FLASK_APP = flaskr
-init-db: export FLASK_ENV = development
-gen-migrate: export FLASK_APP = flaskr
-gen-migrate: export FLASK_ENV = development
-
 build:
 	docker-compose -f deployments/docker-compose.yaml up --build
 
@@ -27,21 +20,21 @@ up-db:
 
 migrate: up-db
 	sleep 2
-	flask db upgrade
+	docker-compose -f deployments/docker-compose.yaml run --entrypoint 'flask db upgrade' flaskr
 
 gen-migrate: up-db
 	sleep 2
-	flask db migrate
+	docker-compose -f deployments/docker-compose.yaml run --entrypoint 'flask db migrate' flaskr
 
 init-db: up-db
 	sleep 2
-	flask db init
+	docker-compose -f deployments/docker-compose.yaml run --entrypoint 'flask db init' flaskr
 
 test:
 	docker-compose -f deployments/docker-compose.yaml up -d db
-	coverage run -m pytest
-	coverage report
-	coverage html
+	docker-compose -f deployments/docker-compose.yaml exec flaskr coverage run -m pytest
+	docker-compose -f deployments/docker-compose.yaml exec flaskr coverage report
+	docker-compose -f deployments/docker-compose.yaml exec flaskr coverage html
 	
 logs:
 	docker-compose -f deployments/docker-compose.yaml logs -f

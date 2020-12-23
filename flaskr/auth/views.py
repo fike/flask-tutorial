@@ -3,6 +3,7 @@ import functools
 from flask import Blueprint
 from flask import flash
 from flask import g
+from flask import make_response
 from flask import redirect
 from flask import render_template
 from flask import request
@@ -33,8 +34,6 @@ def get_profile(id, check_author=True):
     # user = User.query.filter_by(id=id).with_entities(User.username.label('username'), User.profile.label('profile')).first()
     # user.update({'username': user_attributes[0], 'profile' = })
     user = User.query.get_or_404(id, f"User id {id} doesn't exist.")
-    print(user.username)
-    print(g.user)
     if check_author and user != g.user:
         abort(403)
 
@@ -60,6 +59,7 @@ def register():
         username = request.form["username"]
         password = request.form["password"]
         profile = request.form["profile"]
+        bgcolor = request.form["bgcolor"]
         error = None
 
         if not username:
@@ -68,6 +68,8 @@ def register():
             error = "Password is required."
         elif not profile:
             error = "Profile is required."
+        elif not bgcolor:
+            error = "Color banner is required."
         elif db.session.query(
             User.query.filter_by(username=username).exists()
         ).scalar():
@@ -75,13 +77,17 @@ def register():
 
         if error is None:
             # the name is available, create the user and go to the login page
-            db.session.add(User(username=username, password=password, profile=profile))
+            db.session.add(User(username=username, password=password,
+                                profile=profile, bgcolor=bgcolor))
             db.session.commit()
-            return redirect(url_for("auth.login"))
+            response_html = redirect(url_for("auth.login"))
+            return response_html
 
         flash(error)
 
-    return render_template("auth/register.html")
+    response_html = render_template("auth/register.html")
+
+    return response_html
 
 
 @bp.route("/login", methods=("GET", "POST"))
@@ -106,14 +112,17 @@ def login():
 
         flash(error)
 
-    return render_template("auth/login.html")
+    response_html = render_template("auth/login.html")
+
+    return response_html
 
 
 @bp.route("/logout")
 def logout():
     """Clear the current session, including the stored user id."""
     session.clear()
-    return redirect(url_for("index"))
+    response_html = redirect(url_for("index"))
+    return response_html
 
 
 @bp.route("/<int:id>/profile", methods=("GET", "POST"))
@@ -122,9 +131,13 @@ def profile(id):
     """Update a user profile"""
     user = get_profile(id)
 
+    lbgcolors = ["lightgray", "yellow", "purple"]
+    response_html = ''
+
     if request.method == "POST":
-        username = request.form["username"] 
+        username = request.form["username"]
         profile = request.form["profile"]
+        bgcolor = request.form["bgcolor"]
         error = None
 
         if not username:
@@ -133,12 +146,18 @@ def profile(id):
         if not profile:
             error = "Profile is required"
 
+        if not bgcolor:
+            error = "Banner color is required."
+
         if error is not None:
             flash(error)
         else:
+            response_html = make_response(redirect(url_for("blog.index")))
             user.username = username
             user.profile = profile
+            user.bgcolor = bgcolor
             db.session.commit()
-            return redirect(url_for("blog.index"))
-    
-    return render_template("auth/profile.html", user=user)
+            response_html.set_cookie('color', bgcolor)
+            return response_html
+
+    return render_template("auth/profile.html", user=user, lbgcolors=lbgcolors)
