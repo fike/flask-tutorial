@@ -132,6 +132,32 @@ html {
     align-self: start;
     min-width: 10em;
   }
+
+.form_label {
+  float: left;
+  width: 100%;
+  margin-top: 1px;
+}
+
+.form_field {
+  /* float: left; */
+  width: 95%;
+  padding-left: 400;
+  /* width: 400px; */
+  margin-top: 1px;
+}
+
+.form_select {
+  float: left;
+  width: 100%;
+  margin-top: 1px;
+}
+
+.form_button {
+  float: left;
+  width: 20%;
+  margin-top: 6px;
+}
   
 .ligthgray {
   background:lightgray;
