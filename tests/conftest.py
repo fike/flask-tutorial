@@ -19,7 +19,7 @@ def app():
     # create the app with common test config
     # app = create_app({"TESTING": True, "SQLALCHEMY_DATABASE_URI": "sqlite:///:memory:"})
     app = create_app({"TESTING": True, "SQLALCHEMY_DATABASE_URI":
-                      "postgresql://flaskr:flaskr_pass@localhost:5432/test_flaskr"})
+                      "postgresql://flaskr:flaskr_pass@db:5432/test_flaskr"})
 
     # create the database and load test data
     # set _password to pre-generated hashes, since hashing for each test is slow
