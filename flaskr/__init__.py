@@ -21,7 +21,7 @@ def create_app(test_config=None):
 
     if db_url is None:
         # URI PostgreSQL Example
-        db_url = "postgresql://flaskr:flaskr_pass@localhost:5432/flaskr"
+        db_url = "postgresql://flaskr:flaskr_pass@db:5432/flaskr"
 
     app.config.from_mapping(
         # default secret that should be overridden in environ or config

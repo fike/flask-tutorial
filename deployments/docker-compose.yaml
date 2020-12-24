@@ -25,7 +25,6 @@ services:
     environment:
     - FLASK_APP=flaskr
     - FLASK_ENV=development
-    - DATABASE_URL=postgresql://flaskr:flaskr_pass@db:5432/flaskr
     networks:
       - dev
     ports:

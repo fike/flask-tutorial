@@ -86,6 +86,23 @@ def test_profile_update(client, auth, app):
         response = client.get("/")
         assert b'yellow' in response.data
 
+    
+@pytest.mark.parametrize(
+    ("username", "profile", "bgcolor", "message"),
+    (
+        ("", "a", "yellow", b"Username is required."),
+        ("a", "", "yellow", b"Profile is required."),
+        ("a", "a", "", b"Banner color is required"),
+    ),
+)
+def test_profile_update_validate(client, auth, app, username, profile, bgcolor, message):
+    auth.login()
+    response = client.post(
+        "/auth/1/profile", 
+        data={"username": username, "profile": profile, "bgcolor": bgcolor}
+        )
+    assert message in response.data
+
 
 def test_cookie_validate(client, auth, app):
     auth.login()
