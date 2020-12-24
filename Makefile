@@ -1,5 +1,12 @@
 PHONY: build up
 
+migrate: export FLASK_APP = flaskr
+migrate: export FLASK_ENV = development
+init-db: export FLASK_APP = flaskr
+init-db: export FLASK_ENV = development
+gen-migrate: export FLASK_APP = flaskr
+gen-migrate: export FLASK_ENV = development
+
 build:
 	docker-compose -f deployments/docker-compose.yaml up --build
 
@@ -10,7 +17,7 @@ down:
 	docker-compose -f deployments/docker-compose.yaml down
 
 down-db:
-	docker-compose -f deployments/docker-compose.yaml down db
+	docker-compose -f deployments/docker-compose.yaml stop db
 
 clean:
 	docker-compose -f deployments/docker-compose.yaml down -v --rmi all
@@ -31,10 +38,15 @@ init-db: up-db
 	docker-compose -f deployments/docker-compose.yaml run --entrypoint 'flask db init' flaskr
 
 test:
-	docker-compose -f deployments/docker-compose.yaml up -d db
-	docker-compose -f deployments/docker-compose.yaml exec flaskr coverage run -m pytest
-	docker-compose -f deployments/docker-compose.yaml exec flaskr coverage report
-	docker-compose -f deployments/docker-compose.yaml exec flaskr coverage html
+	docker-compose -f deployments/docker-compose.yaml run --entrypoint 'coverage run -m pytest' flaskr
+	docker-compose -f deployments/docker-compose.yaml run --entrypoint 'coverage report' flaskr
+	docker-compose -f deployments/docker-compose.yaml run --entrypoint 'coverage html' flaskr
+
+	# docker-compose -f deployments/docker-compose.yaml up -d db
+local-test:
+	coverage run -m pytest
+	coverage report
+	coverage html
 	
 logs:
 	docker-compose -f deployments/docker-compose.yaml logs -f

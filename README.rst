@@ -2,7 +2,16 @@ Flaskr
 ======
 
 This a repo that use originally Flask `tutorial` with example code from Flask-SQLAlchemy project, adding Flask Migrate to use 
-migrations, PostgreSQL as database. Can use a virtualenv or a container environment with Docker an Docker-Composer
+migrations, PostgreSQL as database. Can use a virtualenv or a container environment with Docker an Docker-Composer.
+
+Features
+-------
+
+This project has additional features that apply in my learned:
+
+* Profile page with profile description
+* An option to change top banner color.
+* A cookie based of logged user to identify what's the color banner must to show. 
 
 
 the original tutorial is:
@@ -27,8 +36,6 @@ For every change of model, run `make migrate` to update Alembic migrations.
 
 .. code-block:: text
 
-    $ export FLASK_APP=flaskr
-    $ export FLASK_ENV=development
     $ make up-db
     $ make migrate
 
@@ -53,5 +60,4 @@ TODO
 ----
 
 * Add remote container development
-* Add cookie session 
-* Add cookie for change color theme
+* Add Helm chart installation

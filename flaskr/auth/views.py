@@ -141,10 +141,10 @@ def profile(id):
         error = None
 
         if not username:
-            error = "Username is required"
+            error = "Username is required."
 
         if not profile:
-            error = "Profile is required"
+            error = "Profile is required."
 
         if not bgcolor:
             error = "Banner color is required."
