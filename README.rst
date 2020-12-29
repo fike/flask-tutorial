@@ -12,12 +12,13 @@ This project has additional features that apply in my learned:
 * Profile page with profile description
 * An option to change top banner color.
 * A cookie based of logged user to identify what's the color banner must to show. 
+* Auto-instrumentation by OpenTelemetry_
 
+.. _OpenTelemetry: https://opentelemetry.io/
 
-the original tutorial is:
+The original tutorial is here_.
 
-.. _tutorial: http://flask.pocoo.org/docs/tutorial/
-
+.. _here: https://flask.palletsprojects.com/en/1.1.x/tutorial/
 
 Install
 -------
@@ -32,22 +33,50 @@ Install
 Run
 ---
 
-For every change of model, run `make migrate` to update Alembic migrations.
+For every change of model, run `make migrate` before to start this project to update Alembic migrations.
 
 .. code-block:: text
 
     $ make up-db
     $ make migrate
 
-Run using Docker and Docker-Compose
+To start just use `make up`:
 
 .. code-block:: text
-    # make up
+    
+    $ make up
 
-Open http://127.0.0.1:5000 in a browser.
+
+Instrumentation
+---------------
+
+To start see how instrumentation is working here, it changes **OTELE_TRACE** value to "**False**" in the Docker Compose file:
+
+**deployments/docker-compose.yaml**
+
+    [...]
+
+    OTELE_TRACE=False
+    
+    [...]
+
+
+And the terminal run:
+
+.. code-block:: text
+    
+    $ make up-all
+
+
+Open http://127.0.0.1:5000 in a browser to access application, go yo http://localhost:16686/ to access Jaeger UI.
+
+
 
 Test
 ----
+
+To run pytest and to know what's the test coverage runs:
+
 
 .. code-block:: text
 
@@ -61,3 +90,4 @@ TODO
 
 * Add remote container development
 * Add Helm chart installation
+* Add track based user id

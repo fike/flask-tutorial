@@ -25,6 +25,7 @@ services:
     environment:
     - FLASK_APP=flaskr
     - FLASK_ENV=development
+    - OTELE_TRACE=False
     networks:
       - dev
     ports:

@@ -1,52 +1,61 @@
 PHONY: build up
 
-migrate: export FLASK_APP = flaskr
-migrate: export FLASK_ENV = development
-init-db: export FLASK_APP = flaskr
-init-db: export FLASK_ENV = development
-gen-migrate: export FLASK_APP = flaskr
-gen-migrate: export FLASK_ENV = development
+ANT_HOME := /usr/local/ant 
+
+DC_EXEC := docker-compose
+
+DC_DIR := deployments
+
+DC_FLASKR := docker-compose.yaml
+DC_JAEGER := docker-compose-jaeger.yaml
 
 build:
-	docker-compose -f deployments/docker-compose.yaml up --build
+	$(DC_EXEC) -f $(DC_DIR)/$(DC_FLASKR) up --build --no-start --remove-orphans
 
 up: down 
-	docker-compose -f deployments/docker-compose.yaml up
+	$(DC_EXEC) -f $(DC_DIR)/$(DC_FLASKR) up --remove-orphans
 
 down:
-	docker-compose -f deployments/docker-compose.yaml down
+	$(DC_EXEC) -f $(DC_DIR)/$(DC_FLASKR) down
 
 down-db:
-	docker-compose -f deployments/docker-compose.yaml stop db
+	$(DC_EXEC) -f $(DC_DIR)/$(DC_FLASKR) stop db
 
-clean:
-	docker-compose -f deployments/docker-compose.yaml down -v --rmi all
+down-jaeger:
+	$(DC_EXEC) -f $(DC_DIR)/$(DC_JAEGER) down
+
+clean: down-jaeger down
+	docker system prune -f
 
 up-db:
-	docker-compose -f deployments/docker-compose.yaml up -d db
+	$(DC_EXEC) -f $(DC_DIR)/$(DC_FLASKR) up -d db
+
+up-jaeger:
+	$(DC_EXEC) -f $(DC_DIR)/$(DC_JAEGER) up -d
+
+up-all: up-jaeger up
 
 migrate: up-db
 	sleep 2
-	docker-compose -f deployments/docker-compose.yaml run --entrypoint 'flask db upgrade' flaskr
+	$(DC_EXEC) -f $(DC_DIR)/$(DC_FLASKR) run --entrypoint 'flask db upgrade' flaskr
 
 gen-migrate: up-db
 	sleep 2
-	docker-compose -f deployments/docker-compose.yaml run --entrypoint 'flask db migrate' flaskr
+	$(DC_EXEC) -f $(DC_DIR)/$(DC_FLASKR) run --entrypoint 'flask db migrate' flaskr
 
 init-db: up-db
 	sleep 2
-	docker-compose -f deployments/docker-compose.yaml run --entrypoint 'flask db init' flaskr
+	$(DC_EXEC) -f $(DC_DIR)/$(DC_FLASKR) run --entrypoint 'flask db init' flaskr
 
 test:
-	docker-compose -f deployments/docker-compose.yaml run --entrypoint 'coverage run -m pytest' flaskr
-	docker-compose -f deployments/docker-compose.yaml run --entrypoint 'coverage report' flaskr
-	docker-compose -f deployments/docker-compose.yaml run --entrypoint 'coverage html' flaskr
+	$(DC_EXEC) -f $(DC_DIR)/$(DC_FLASKR) run --entrypoint 'coverage run -m pytest' flaskr
+	$(DC_EXEC) -f $(DC_DIR)/$(DC_FLASKR) run --entrypoint 'coverage report' flaskr
+	$(DC_EXEC) -f $(DC_DIR)/$(DC_FLASKR) run --entrypoint 'coverage html' flaskr
 
-	# docker-compose -f deployments/docker-compose.yaml up -d db
 local-test:
 	coverage run -m pytest
 	coverage report
 	coverage html
 	
 logs:
-	docker-compose -f deployments/docker-compose.yaml logs -f
+	$(DC_EXEC) -f $(DC_DIR)/$(DC_FLASKR) -f $(DC_DIR)/$(DC_JAEGER) logs -f
