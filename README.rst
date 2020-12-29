@@ -48,7 +48,8 @@ To start just use `make up`:
 To start see how instrumentation is working here, it changes OTELE_TRACE value to "False" in the Docker Compose file:
 
 deployments/docker-compose.yaml
-.. code-block::
+
+.. code-block:: text
 [...]
     OTELE_TRACE=False
 [...]
@@ -58,7 +59,7 @@ And the terminal run:
 .. code-block:: text
     # make up-all
 
-Open http://127.0.0.1:5000 in a browser.
+Open http://127.0.0.1:5000 in a browser to access application, go yo http://localhost:16686/ to access Jaeger UI.
 
 
 See instrumentation
