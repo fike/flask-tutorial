@@ -1,5 +1,5 @@
 from flaskr import create_app
-
+import os
 
 def test_config():
     """Test create_app without passing test config."""
@@ -20,3 +20,8 @@ def test_init_db_command(runner, monkeypatch):
 
     def fake_init_db():
         Recorder.called = True
+
+# def test_env_var(monkeypatch):
+#     monkeypatch.setenv("OTELE_TRACE", "True")
+#     otele_env_var = os.environ['OTELE_TRACE']
+#     assert 'True' in otele_env_var

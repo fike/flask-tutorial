@@ -12,6 +12,7 @@ This project has additional features that apply in my learned:
 * Profile page with profile description
 * An option to change top banner color.
 * A cookie based of logged user to identify what's the color banner must to show. 
+* Auto-instrumentation by [OpenTelemetry](https://opentelemetry.io/)
 
 
 the original tutorial is:
@@ -32,19 +33,39 @@ Install
 Run
 ---
 
-For every change of model, run `make migrate` to update Alembic migrations.
+For every change of model, run `make migrate` before to start this project to update Alembic migrations.
 
 .. code-block:: text
 
     $ make up-db
     $ make migrate
 
-Run using Docker and Docker-Compose
+To start just use `make up`:
 
 .. code-block:: text
     # make up
 
+To start see how instrumentation is working here, it changes OTELE_TRACE value to "False" in the Docker Compose file:
+
+deployments/docker-compose.yaml
+.. code-block::
+[...]
+    OTELE_TRACE=False
+[...]
+
+And the terminal run:
+
+.. code-block:: text
+    # make up-all
+
 Open http://127.0.0.1:5000 in a browser.
+
+
+See instrumentation
+-------------------
+
+It's 
+
 
 Test
 ----
