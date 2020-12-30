@@ -12,7 +12,7 @@ DC_JAEGER := docker-compose-jaeger.yaml
 build:
 	$(DC_EXEC) -f $(DC_DIR)/$(DC_FLASKR) up --build --no-start --remove-orphans
 
-up: down 
+up:  
 	$(DC_EXEC) -f $(DC_DIR)/$(DC_FLASKR) up --remove-orphans
 
 down:
@@ -31,9 +31,10 @@ up-db:
 	$(DC_EXEC) -f $(DC_DIR)/$(DC_FLASKR) up -d db
 
 up-jaeger:
-	$(DC_EXEC) -f $(DC_DIR)/$(DC_JAEGER) up -d
+	$(DC_EXEC) -f $(DC_DIR)/$(DC_JAEGER) up --remove-orphans 
 
-up-all: up-jaeger up
+up-all:
+	$(DC_EXEC) -f $(DC_DIR)/$(DC_JAEGER) -f $(DC_DIR)/$(DC_FLASKR) up --remove-orphans 
 
 migrate: up-db
 	sleep 2
