@@ -8,39 +8,27 @@ from flask_migrate import Migrate
 
 from opentelemetry import trace
 from opentelemetry.exporter import jaeger
-from opentelemetry.instrumentation.flask import FlaskInstrumentor
-from opentelemetry.instrumentation.sqlalchemy import SQLAlchemyInstrumentor
-from opentelemetry.instrumentation.jinja2 import Jinja2Instrumentor
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchExportSpanProcessor
-
-
-otele_enable = os.environ['OTELE_TRACE'] 
-if otele_enable == "True":
-    trace.set_tracer_provider(TracerProvider())  # pragma: no cover
-    trace_exporter = jaeger.JaegerSpanExporter(  # pragma: no cover
-        service_name="flask-tutorial",
-        agent_host_name="jaeger-server",
-        agent_port=6831,
-    )
-    trace.get_tracer_provider().add_span_processor(  # pragma: no cover
-        BatchExportSpanProcessor(trace_exporter)
-    )
 
 __version__ = (1, 0, 0, "dev")
 
 db = SQLAlchemy()
 migrate = Migrate()
 
+trace.set_tracer_provider(TracerProvider())
+trace_exporter = jaeger.JaegerSpanExporter(
+    service_name="flask-tutorial",
+    agent_host_name="jaeger-server",
+    agent_port=6831,
+)
+trace.get_tracer_provider().add_span_processor(
+    BatchExportSpanProcessor(trace_exporter)
+)
 
 def create_app(test_config=None):
     """Create and configure an instance of the Flask application."""
     app = Flask(__name__, instance_relative_config=True)
-
-    """Implement Opentelemetry"""
-    FlaskInstrumentor().instrument_app(app)
-    SQLAlchemyInstrumentor().instrument()
-    Jinja2Instrumentor().instrument()
 
     # some deploy systems set the database url in the environ
     db_url = os.environ.get("DATABASE_URL")

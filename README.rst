@@ -82,7 +82,7 @@ To run pytest and to know what's the test coverage runs:
 
     $ make test
 
-Coverage report will generate in *htmlcov* directory
+The coverage test report will generate in *htmlcov* directory
 
 
 TODO
