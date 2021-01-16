@@ -107,10 +107,8 @@ def test_profile_update_validate(client, auth, app, username, profile, bgcolor, 
 def test_cookie_validate(client, auth, app):
     auth.login()
     client.post("/login", data={"username": "a"})
-    # header = dump_cookie("color", "ligthgray")
 
     with app.app_context():
-        # assert request.cookies['color'] == 'ligthgray'
         default_bgcolor = 'ligthgray'
         response = client.get("/")
         cookie_header = response.headers['Set-Cookie']

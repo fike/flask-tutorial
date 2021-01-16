@@ -9,9 +9,9 @@ def test_config():
 
 def test_db_url_environ(monkeypatch):
     """Test DATABASE_URL environment variable."""
-    monkeypatch.setenv("DATABASE_URL", "postgresql://flaskr:flaskr_pass@db:5432/test_flaskr")
+    monkeypatch.setenv("DATABASE_URL", "sqlite:///:memory")
     app = create_app()
-    assert app.config["SQLALCHEMY_DATABASE_URI"] == "postgresql://flaskr:flaskr_pass@db:5432/test_flaskr"
+    assert app.config["SQLALCHEMY_DATABASE_URI"] == "sqlite:///:memory"
 
 
 def test_init_db_command(runner, monkeypatch):
@@ -20,8 +20,3 @@ def test_init_db_command(runner, monkeypatch):
 
     def fake_init_db():
         Recorder.called = True
-
-# def test_env_var(monkeypatch):
-#     monkeypatch.setenv("OTELE_TRACE", "True")
-#     otele_env_var = os.environ['OTELE_TRACE']
-#     assert 'True' in otele_env_var

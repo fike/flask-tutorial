@@ -18,8 +18,8 @@ services:
       dockerfile: deployments/Dockerfile_flaskr
       args: 
         ENVIRONMENT: developement
-    # volumes:
-    #   - $PWD:/opt/flaskr
+    volumes:
+      - $PWD:/opt/flaskr
     # depends_on:
     #   - db
     environment:

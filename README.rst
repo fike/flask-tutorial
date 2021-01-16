@@ -91,3 +91,4 @@ TODO
 * Add remote container development
 * Add Helm chart installation
 * Add track based user id
+* Add char limit for title post
