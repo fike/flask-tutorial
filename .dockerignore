@@ -1,0 +1,8 @@
+htmlcov
+flaskr.egg-info
+.vscode
+*pycache*
+.devcontainer
+.git
+.pytest_cache
+.venv

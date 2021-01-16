@@ -1,12 +1,11 @@
 PHONY: build up
 
-ANT_HOME := /usr/local/ant 
-
 DC_EXEC := docker-compose
 
 DC_DIR := deployments
 
-DC_FLASKR := docker-compose.yaml
+DC_FLASKR := docker-compose-dev.yaml
+DC_FLASKR_PROD := docker-compose.yaml
 DC_JAEGER := docker-compose-jaeger.yaml
 
 build:
@@ -14,6 +13,9 @@ build:
 
 up:  
 	$(DC_EXEC) -f $(DC_DIR)/$(DC_FLASKR) up --remove-orphans
+
+up-prod:  
+	$(DC_EXEC) -f $(DC_DIR)/$(DC_FLASKR_PROD) up --remove-orphans
 
 down:
 	$(DC_EXEC) -f $(DC_DIR)/$(DC_FLASKR) down

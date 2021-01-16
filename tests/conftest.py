@@ -1,5 +1,5 @@
 from datetime import datetime
-import os
+
 import pytest
 from werkzeug.security import generate_password_hash
 
