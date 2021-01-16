@@ -10,8 +10,7 @@ ENV FLASK_APP=flaskr
 
 COPY . .
 
-RUN pip install -r requirements.txt &&\
-    opentelemetry-bootstrap --action=install
+RUN pip install -r requirements.txt 
 
 EXPOSE 5000
 
